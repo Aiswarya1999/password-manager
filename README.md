@@ -1,40 +1,105 @@
-# 🔐 Password Manager
 
-A simple **Python-based password manager** that encrypts and securely stores passwords using the **Fernet encryption** module. This is a beginner-friendly cybersecurity project that demonstrates **secure password storage, encryption, and JSON-based data handling**.
+# 🔐 Password Manager (Python)
 
----
+A simple yet secure command-line password manager built with Python. It allows you to store, retrieve, update, and delete encrypted passwords securely using a master password.
 
 ## 🚀 Features
 
-✅ **Secure Storage** – Encrypts passwords before saving them  
-✅ **Fernet Encryption** – Ensures strong security using `cryptography` module  
-✅ **Add & View Passwords** – Store and retrieve passwords securely  
-✅ **Update Passwords** – Easily update existing passwords  
-✅ **JSON Database** – Lightweight and easy to manage  
-✅ **Command-Line Interface (CLI)** – Simple user input system  
+- 🔑 **Master Password Protection**  
+  Derives a strong encryption key from your master password using PBKDF2 with SHA256 and a unique salt.
+
+- 🛡️ **Secure Encryption**  
+  All passwords are encrypted using `Fernet` symmetric encryption from the `cryptography` module.
+
+- 📂 **JSON-Based Storage**  
+  Passwords are stored securely in an encrypted JSON file.
+
+- 🗃️ **Update & Delete Support**  
+  Easily update or delete saved entries.
+
+- 📋 **Clipboard Control** *(Planned)*  
+  Auto-copy to clipboard and clear after a timer (coming soon).
+
+- ❌ **Account Name Validation**  
+  Prevents saving numeric-only account names for better readability and security.
 
 ---
 
-## 🛠️ Installation & Setup
+## 📦 Requirements
 
-### 1️⃣ Clone the Repository
+- Python 3.6+
+- `cryptography`
+- `pyperclip` (optional, for clipboard support)
+
+Install dependencies:
 ```bash
-git clone https://github.com/yourusername/password-manager.git
+pip install cryptography pyperclip
+```
+
+---
+
+## 🛠️ Usage
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Aiswarya1999/password-manager.git
 cd password-manager
+```
 
-2️⃣ Set Up a Virtual Environment
-bash:
-python -m venv venv
-
-3️⃣ Install Dependencies
-bash:
-pip install cryptography
-
-4️⃣ Generate an Encryption Key
-Before running the program, generate a secret key:
-bash:
+### 2. Generate Encryption Key
+Run the key generator script once:
+```bash
 python keygen.py
+```
 
-5️⃣ Run the Password Manager
-bash
+### 3. Start the Password Manager
+```bash
 python main.py
+```
+
+You’ll be prompted for a **master password**, which will be used to derive a secure encryption key.
+
+---
+
+## 📁 Project Structure
+
+```
+password-manager/
+│
+├── main.py          # Main application
+├── keygen.py        # Generates encryption key
+├── passwords.json   # Encrypted password storage (auto-generated)
+├── key.key          # Encryption key (auto-generated)
+├── README.md        # This file
+└── .gitignore       # Prevents key files from being pushed
+```
+
+---
+
+## ⚠️ Security Notice
+
+- Never share your `key.key` or `passwords.json` files publicly.
+- Use a strong master password — it's critical to protecting your stored data.
+
+---
+
+## 💡 To Do
+
+- [ ] Clipboard auto-clear after copy
+- [ ] GUI using Tkinter or PyQt
+- [ ] Backup & sync options
+
+---
+
+## 🧑‍💻 Author
+
+Made with ❤️ by [Aiswarya](https://github.com/Aiswarya1999)
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+```
+
+---
