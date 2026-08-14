@@ -1,4 +1,9 @@
 venv/
 __pycache__/
-*.pyc 
+*.pyc
 key.key
+passwords.json
+salt.bin
+master.hash
+master.salt
+*.tmp
