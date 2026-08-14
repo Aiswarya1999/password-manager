@@ -1,8 +1,12 @@
+
 # 🔐 Password Manager (Python)
+
+🔐 Password Manager (Python)
 
 A simple, secure command-line password manager. Stores, retrieves, updates, and deletes encrypted passwords behind a single master password.
 
-## 🚀 Features
+🚀 Features
+
 
 - 🔑 **Master Password Protection** — the master password is never stored directly. Only a PBKDF2-SHA256 hash (480,000 iterations) is kept, checked with a constant-time comparison, with a 30-second lockout after 5 failed attempts.
 - 🛡️ **No Key Ever Touches Disk** — the actual encryption key is derived fresh from your master password every time the program starts (PBKDF2-SHA256 → Fernet key) and lives in memory only for that session. Only a non-secret salt is persisted.
@@ -12,7 +16,13 @@ A simple, secure command-line password manager. Stores, retrieves, updates, and 
 - ⏱️ **Timed Reveal** — viewing a password shows it in the terminal with a 15-second countdown; press `0` or `e` to hide it early (Windows).
 - 🧹 **Cascading Delete** — deleting the last username under a website removes the website entry too; deleting one of several usernames leaves the others intact, with a prompt to delete the whole website instead if you want.
 
-## 📦 Requirements
+
+📦 Requirements
+Python 3.10+
+cryptography
+
+
+Install:
 
 - Python 3.10+
 - `cryptography`
@@ -28,9 +38,14 @@ pip install -r requirements.txt
 **1. Clone the repository**
 
 ```
+
+pip install -r requirements.txt
+🛠️ Usage
+
+1. Clone the repository
+
 git clone https://github.com/Aiswarya1999/password-manager.git
 cd password-manager
-```
 
 **2. Install dependencies**
 
@@ -41,8 +56,13 @@ pip install -r requirements.txt
 **3. Run it**
 
 ```
+2. Install dependencies
+
+pip install -r requirements.txt
+
+3. Run it
+
 python main.py
-```
 
 On first run, you'll be asked to set a master password. After that, you'll be asked to enter it each time to unlock the vault.
 
@@ -67,9 +87,7 @@ Then open a new terminal and just type `pass` from any directory.
 
 After each action you'll be asked **"Is that all? (y/n)"** — `y` exits, anything else loops back to the menu.
 
-## 📁 Project Structure
-
-```
+📁 Project Structure
 password-manager/
 │
 ├── main.py            # Entry point
@@ -86,9 +104,20 @@ password-manager/
 ├── master.salt          # Non-secret salt for the master password hash
 ├── master.hash          # Master password hash (not the password itself)
 └── passwords.json        # Your encrypted vault
-```
 
-## ⚠️ Security Notice
+⚠️ Security Notice
+passwords.json, salt.bin, master.hash, and master.salt are all listed in .gitignore and should never be committed. If you fork or clone this repo, these files will be generated fresh on your machine the first time you run it.
+Losing your master password means losing access to your vault — there is no recovery mechanism, by design.
+This is a personal, single-user, local-only tool. It hasn't been audited and shouldn't be treated as a substitute for an established password manager for anything you can't afford to lose.
+💡 To Do
+
+Session auto-lock after a period of inactivity
+GUI (Tkinter or PyQt)
+Backup/export options
+
+🧑‍💻 Author
+
+Made with ❤️ by Aiswarya
 
 - `passwords.json`, `salt.bin`, `master.hash`, and `master.salt` are all listed in `.gitignore` and should **never** be committed. If you fork or clone this repo, these files will be generated fresh on your machine the first time you run it.
 - Losing your master password means losing access to your vault — there is no recovery mechanism, by design.
@@ -105,5 +134,8 @@ password-manager/
 Made with ❤️ by [Aiswarya](https://github.com/Aiswarya1999)
 
 ## 📜 License
+
+📜 License
+
 
 This project is licensed under the MIT License.
