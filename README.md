@@ -5,12 +5,19 @@ A simple, secure command-line password manager. Stores, retrieves, updates, and 
 🚀 Features
 
 🔑 Master Password Protection — the master password is never stored directly. Only a PBKDF2-SHA256 hash (480,000 iterations) is kept, checked with a constant-time comparison, with a 30-second lockout after 5 failed attempts.
+
 🛡️ No Key Ever Touches Disk — the actual encryption key is derived fresh from your master password every time the program starts (PBKDF2-SHA256 → Fernet key) and lives in memory only for that session. Only a non-secret salt is persisted.
+
 📂 Encrypted, Atomic Storage — passwords are encrypted with Fernet (from the cryptography library) and written to passwords.json atomically (temp file + rename), so an interrupted write can't corrupt the vault.
+
 🗂️ Multiple Accounts Per Website — each website can hold several username/password pairs, not just one.
+
 🗃️ Full CRUD — view, add, update, and delete entries from a simple menu.
+
 ⏱️ Timed Reveal — viewing a password shows it in the terminal with a 15-second countdown; press 0 or e to hide it early (Windows).
+
 🧹 Cascading Delete — deleting the last username under a website removes the website entry too; deleting one of several usernames leaves the others intact, with a prompt to delete the whole website instead if you want.
+
 📦 Requirements
 Python 3.10+
 cryptography
