@@ -1,12 +1,8 @@
-
 # 🔐 Password Manager (Python)
-
-🔐 Password Manager (Python)
 
 A simple, secure command-line password manager. Stores, retrieves, updates, and deletes encrypted passwords behind a single master password.
 
-🚀 Features
-
+## 🚀 Features
 
 - 🔑 **Master Password Protection** — the master password is never stored directly. Only a PBKDF2-SHA256 hash (480,000 iterations) is kept, checked with a constant-time comparison, with a 30-second lockout after 5 failed attempts.
 - 🛡️ **No Key Ever Touches Disk** — the actual encryption key is derived fresh from your master password every time the program starts (PBKDF2-SHA256 → Fernet key) and lives in memory only for that session. Only a non-secret salt is persisted.
@@ -16,36 +12,29 @@ A simple, secure command-line password manager. Stores, retrieves, updates, and 
 - ⏱️ **Timed Reveal** — viewing a password shows it in the terminal with a 15-second countdown; press `0` or `e` to hide it early (Windows).
 - 🧹 **Cascading Delete** — deleting the last username under a website removes the website entry too; deleting one of several usernames leaves the others intact, with a prompt to delete the whole website instead if you want.
 
+## 🧠 Design Notes
 
-📦 Requirements
-Python 3.10+
-cryptography
+A few choices here were deliberate, not defaults:
 
+- **PBKDF2 iterations (480,000).** This is OWASP's 2023+ recommended minimum for PBKDF2-SHA256. Higher iteration counts make brute-force key guessing slower for an attacker while adding negligible latency for a legitimate login.
+- **Key derived fresh every session, never persisted.** Only the derivation *salt* is stored on disk (salts aren't secret — their job is to make precomputed rainbow-table attacks useless, not to hide anything). The actual Fernet key only ever exists in memory for the life of the process, so there's no key file to steal.
+- **Master password hash, not the password itself.** Verifying a login only ever compares hashes, using a constant-time comparison to avoid leaking timing information about how close a guess was.
+- **Lockout after failed attempts.** A flat 30-second lockout after 5 failed tries is a deliberately simple brute-force mitigation — enough to make online guessing impractical for a single-user local tool without the complexity of a full rate-limiting scheme.
+- **Atomic writes (temp file + `os.replace`).** `os.replace` is atomic at the OS level, so a crash or power loss mid-write can never leave `passwords.json` half-written or corrupted — you either get the old version or the new one, never a broken one.
 
-Install:
+## 📦 Requirements
 
 - Python 3.10+
 - `cryptography`
-
-Install:
-
-```
-pip install -r requirements.txt
-```
 
 ## 🛠️ Usage
 
 **1. Clone the repository**
 
 ```
-
-pip install -r requirements.txt
-🛠️ Usage
-
-1. Clone the repository
-
 git clone https://github.com/Aiswarya1999/password-manager.git
 cd password-manager
+```
 
 **2. Install dependencies**
 
@@ -56,13 +45,8 @@ pip install -r requirements.txt
 **3. Run it**
 
 ```
-2. Install dependencies
-
-pip install -r requirements.txt
-
-3. Run it
-
 python main.py
+```
 
 On first run, you'll be asked to set a master password. After that, you'll be asked to enter it each time to unlock the vault.
 
@@ -87,37 +71,28 @@ Then open a new terminal and just type `pass` from any directory.
 
 After each action you'll be asked **"Is that all? (y/n)"** — `y` exits, anything else loops back to the menu.
 
-📁 Project Structure
+## 📁 Project Structure
+
+```
 password-manager/
 │
-├── main.py            # Entry point
+├── main.py             # Entry point
 ├── cli.py              # Menu loop and all four actions (view/add/update/delete)
-├── vault_crypto.py     # Key derivation + encrypt/decrypt (key never persisted)
-├── master_auth.py      # Master password set/verify + brute-force lockout
-├── vault_store.py       # Atomic, nested JSON storage
+├── vault_crypto.py      # Key derivation + encrypt/decrypt (key never persisted)
+├── master_auth.py       # Master password set/verify + brute-force lockout
+├── vault_store.py        # Atomic, nested JSON storage
 ├── requirements.txt
-├── .gitignore           # Excludes all generated secrets (see below)
+├── .gitignore            # Excludes all generated secrets (see below)
 └── README.md
 
 # Generated at runtime, never committed:
-├── salt.bin            # Non-secret salt for the encryption key
-├── master.salt          # Non-secret salt for the master password hash
-├── master.hash          # Master password hash (not the password itself)
-└── passwords.json        # Your encrypted vault
+├── salt.bin             # Non-secret salt for the encryption key
+├── master.salt           # Non-secret salt for the master password hash
+├── master.hash           # Master password hash (not the password itself)
+└── passwords.json         # Your encrypted vault
+```
 
-⚠️ Security Notice
-passwords.json, salt.bin, master.hash, and master.salt are all listed in .gitignore and should never be committed. If you fork or clone this repo, these files will be generated fresh on your machine the first time you run it.
-Losing your master password means losing access to your vault — there is no recovery mechanism, by design.
-This is a personal, single-user, local-only tool. It hasn't been audited and shouldn't be treated as a substitute for an established password manager for anything you can't afford to lose.
-💡 To Do
-
-Session auto-lock after a period of inactivity
-GUI (Tkinter or PyQt)
-Backup/export options
-
-🧑‍💻 Author
-
-Made with ❤️ by Aiswarya
+## ⚠️ Security Notice
 
 - `passwords.json`, `salt.bin`, `master.hash`, and `master.salt` are all listed in `.gitignore` and should **never** be committed. If you fork or clone this repo, these files will be generated fresh on your machine the first time you run it.
 - Losing your master password means losing access to your vault — there is no recovery mechanism, by design.
@@ -134,8 +109,5 @@ Made with ❤️ by Aiswarya
 Made with ❤️ by [Aiswarya](https://github.com/Aiswarya1999)
 
 ## 📜 License
-
-📜 License
-
 
 This project is licensed under the MIT License.
